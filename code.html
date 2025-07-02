@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tryon Model Inference Form</title>
+    <style>
+        /* Modern clean styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        form {
+            background: rgba(255 255 255 / 0.1);
+            backdrop-filter: blur(12px);
+            padding: 32px 40px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 4px 24px rgb(0 0 0 / 0.2);
+        }
+        h1 {
+            margin-bottom: 24px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        input[type="file"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            cursor: pointer;
+            background: rgba(255 255 255 / 0.9);
+            color: #333;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #a47764;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #845b44;
+        }
+        #result {
+            margin-top: 24px;
+            text-align: center;
+            color: #fff;
+            word-break: break-word;
+        }
+        #result img {
+            max-width: 100%;
+            border-radius: 16px;
+            margin-top: 12px;
+            box-shadow: 0 8px 16px rgb(0 0 0 / 0.4);
+        }
+        #error {
+            margin-top: 24px;
+            text-align: center;
+            color: #ff6b6b;
+            font-weight: 600;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <form id="tryon-form" enctype="multipart/form-data">
+        <h1>Tryon Model Inference</h1>
+        <label for="personImage">Person Image *</label>
+        <input type="file" id="personImage" name="personImage" accept="image/*" required />
+
+        <label for="garmentImage">Garment Image *</label>
+        <input type="file" id="garmentImage" name="garmentImage" accept="image/*" required />
+
+        <label for="category">Garment Category *</label>
+        <select id="category" name="category" required>
+            <option value="Top" selected>Top</option>
+            <option value="Bottom">Bottom</option>
+            <option value="Fullbody">Fullbody</option>
+        </select>
+
+        <label for="apiKey">API Key *</label>
+        <input type="password" id="apiKey" name="apiKey" placeholder="Enter your API key" required />
+
+        <label for="apiEndpoint">API Endpoint *</label>
+        <input type="url" id="apiEndpoint" name="apiEndpoint" placeholder="https://your.api.endpoint" required />
+
+        <button type="submit">Run</button>
+
+        <div id="result"></div>
+        <div id="error"></div>
+    </form>
+
+    <script>
+        const form = document.getElementById('tryon-form');
+        const resultDiv = document.getElementById('result');
+        const errorDiv = document.getElementById('error');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            resultDiv.innerHTML = '';
+            errorDiv.textContent = '';
+
+            const personImageFile = document.getElementById('personImage').files[0];
+            const garmentImageFile = document.getElementById('garmentImage').files[0];
+            const category = document.getElementById('category').value;
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const apiEndpointRaw = document.getElementById('apiEndpoint').value.trim().replace(/\/+$/, ''); // remove trailing slashes
+
+            if (!personImageFile || !garmentImageFile) {
+                errorDiv.textContent = "Please upload both Person and Garment images.";
+                return;
+            }
+            if (!apiKey) {
+                errorDiv.textContent = "Please enter your API key.";
+                return;
+            }
+            if (!apiEndpointRaw) {
+                errorDiv.textContent = "Please enter your API endpoint URL.";
+                return;
+            }
+
+            // Construct form data for POST request to /tryon/v1
+            const formData = new FormData();
+            formData.append('image_model_file', personImageFile);
+            formData.append('image_garment_file', garmentImageFile);
+            formData.append('garment_type', category);
+            formData.append('model_type', 'SD_V1'); // Fixed model type, modify if needed
+            formData.append('repaint_other_garment', 'false');
+
+            try {
+                errorDiv.textContent = "Submitting your request, please wait...";
+
+                const tryonUrl = 'http://localhost:7860/tryon/v1';
+                const resultUrlBase = 'http://localhost:7860/requests/v1?job_id=';
+
+                // Send POST request to start tryon job
+                const response = await fetch(tryonUrl, {
+                    method: 'POST',
+                    headers: {
+                        'x-api-key': apiKey
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API returned ${response.status}: ${errorText}`);
+                }
+
+                const data = await response.json();
+
+                if (!data.job_id) throw new Error('No job_id returned from API');
+
+                errorDiv.textContent = "Processing. This can take up to 60 seconds. Please wait...";
+
+                // Poll the API for the result
+                const jobId = data.job_id;
+
+                async function pollResult(jobId) {
+                    for (let i = 0; i < 40; i++) {
+                        try {
+                            const res = await fetch(resultUrlBase + encodeURIComponent(jobId), {
+                                headers: { 'x-api-key': apiKey }
+                            });
+                            if (!res.ok) throw new Error('Failed to fetch result status');
+
+                            const resData = await res.json();
+
+                            if (resData.status === 'completed') {
+                                const imageUrl = resData.output?.[0]?.image_url;
+                                if (!imageUrl) throw new Error('No image_url returned in output');
+                                return imageUrl;
+                            } else if (resData.status === 'failed') {
+                                throw new Error('API returned failed status for the job');
+                            }
+                            // else status is pending/running: wait and retry
+                        } catch (e) {
+                            console.warn('Polling error:', e);
+                        }
+                        await new Promise(r => setTimeout(r, 1500));
+                    }
+                    throw new Error('Timeout while waiting for processing result');
+                }
+
+                const outputImageUrl = await pollResult(jobId);
+
+                resultDiv.innerHTML = `
+                    <p>Inference completed successfully:</p>
+                    <img src="${outputImageUrl}" alt="Tryon Result Image" />
+                `;
+                errorDiv.textContent = '';
+            } catch (err) {
+                errorDiv.textContent = err.message || 'Unexpected error occurred';
+                resultDiv.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>
+
