@@ -6,16 +6,24 @@
     font-family: 'Arial', sans-serif;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     background-color: #f5f5f5;
     color: #333;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    flex: 1;
 }
 
 /* Header */
@@ -50,16 +58,26 @@ nav ul li a {
     text-decoration: none;
 }
 
-/* Footer */
+/* Footer - SOLUCIÓN FIJADA */
 footer {
     background-color: #2c3e50;
     color: white;
     padding: 20px 0;
-    margin-top: 40px;
     text-align: center;
+    flex-shrink: 0;
+    margin-top: auto;
 }
 
 /* Formularios */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -68,15 +86,26 @@ footer {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    color: #2c3e50;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
 .form-group.checkbox {
@@ -89,20 +118,100 @@ footer {
     margin-right: 10px;
 }
 
+/* Texto de ayuda para categorías */
+.help-text {
+    color: #666;
+    font-size: 0.85em;
+    margin-top: 8px;
+    display: block;
+    line-height: 1.4;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #3498db;
+}
+
+.help-text strong {
+    color: #2c3e50;
+}
+
+/* Imagen actual en formularios */
+.current-image {
+    margin-top: 10px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.current-image p {
+    margin: 0 0 8px 0;
+    font-size: 0.9em;
+    color: #555;
+    font-weight: bold;
+}
+
+/* Botones */
 .btn {
     display: inline-block;
     background-color: #3498db;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     text-decoration: none;
     font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-align: center;
 }
 
 .btn:hover {
     background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-primary {
+    background-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-success {
+    background-color: #2ecc71;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+/* Acciones de formulario */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
 }
 
 /* Alertas */
@@ -110,6 +219,7 @@ footer {
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 4px;
+    font-weight: 500;
 }
 
 .alert.error {
@@ -124,11 +234,11 @@ footer {
     border: 1px solid #c3e6cb;
 }
 
-/* Grid de prendas */
+/* Grid de prendas - 3 POR FILA */
 .prendas-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas fijas */
+    gap: 25px;
     margin-top: 30px;
 }
 
@@ -136,34 +246,60 @@ footer {
     background-color: white;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
 }
 
 .prenda-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
 }
 
 .prenda-card img {
     width: 100%;
-    height: 300px;
+    height: 250px;
     object-fit: cover;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .prenda-card h3 {
-    padding: 15px 15px 0;
+    padding: 15px 15px 5px;
     font-size: 18px;
+    color: #2c3e50;
 }
 
 .prenda-card p {
-    padding: 10px 15px;
+    padding: 0 15px 15px;
     color: #666;
+    font-size: 14px;
 }
 
 .prenda-card .btn {
-    display: block;
-    margin: 15px;
-    text-align: center;
+    margin: 0 15px 15px;
+    width: calc(100% - 30px);
+}
+
+/* Formulario de edición en tarjetas */
+.form-edicion {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.form-edicion .form-group {
+    margin-bottom: 15px;
+}
+
+.form-edicion .form-group label {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.form-edicion .form-group input,
+.form-edicion .form-group textarea,
+.form-edicion .form-group select {
+    padding: 8px 12px;
+    font-size: 14px;
 }
 
 /* Detalle de prenda */
@@ -171,6 +307,10 @@ footer {
     display: flex;
     gap: 40px;
     margin-top: 30px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .prenda-imagen {
@@ -191,44 +331,55 @@ footer {
 .prenda-info h1 {
     font-size: 32px;
     margin-bottom: 20px;
+    color: #2c3e50;
 }
 
 .prenda-info p {
     margin-bottom: 30px;
     font-size: 16px;
     line-height: 1.8;
+    color: #555;
 }
 
+/* Try-on results */
 .tryon-result {
     margin-top: 30px;
-    padding: 20px;
+    padding: 25px;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-left: 4px solid #3498db;
 }
 
 .tryon-result img {
     max-width: 100%;
     margin-top: 20px;
-    border-radius: 4px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .info {
     color: #666;
     font-style: italic;
+    font-size: 14px;
 }
 
 /* Panel de administración */
 .admin-actions {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
+.admin-actions .btn {
+    min-width: 180px;
+}
 
+/* Loading y estados */
 .loading-container {
     text-align: center;
-    padding: 2rem;
+    padding: 3rem;
 }
 
 .loading-spinner {
@@ -248,20 +399,22 @@ footer {
 
 .tryon-result, .error-message {
     text-align: center;
-    padding: 1.5rem;
+    padding: 2rem;
 }
 
 .image-container {
     margin: 1.5rem 0;
     border: 1px solid #ddd;
-    padding: 10px;
+    padding: 15px;
     background: white;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 6px;
 }
 
 .image-container img {
     max-width: 100%;
     height: auto;
+    border-radius: 4px;
 }
 
 .try-again {
@@ -276,5 +429,81 @@ footer {
 .error-message {
     color: #e74c3c;
     background-color: #fdecea;
-    border-radius: 5px;
+    border-radius: 6px;
+    border: 1px solid #f5c6cb;
+    padding: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .prendas-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets grandes */
+    }
+}
+
+@media (max-width: 768px) {
+    .prendas-grid {
+        grid-template-columns: 1fr; /* 1 columna en móviles */
+        gap: 20px;
+    }
+    
+    .prenda-detalle-container {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .admin-actions {
+        flex-direction: column;
+    }
+    
+    .admin-actions .btn {
+        width: 100%;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    header .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    nav ul li {
+        margin: 5px 10px;
+    }
+}
+
+/* Badges para categorías */
+.category-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #e8f4fd;
+    color: #3498db;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+/* Mejoras visuales para el formulario de edición */
+.form-edicion {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

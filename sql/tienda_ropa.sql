@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-06-2025 a las 19:16:29
+-- Tiempo de generación: 07-11-2025 a las 20:04:37
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -34,17 +34,17 @@ CREATE TABLE `prendas` (
   `imagen` varchar(255) NOT NULL,
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   `id_usuario` int(11) DEFAULT NULL,
-  `tipo_prenda` varchar(20) NOT NULL DEFAULT 'Top'
+  `categoria` enum('top','bottom','fullbody') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `prendas`
 --
 
-INSERT INTO `prendas` (`id`, `titulo`, `descripcion`, `imagen`, `fecha_creacion`, `id_usuario`, `tipo_prenda`) VALUES
-(1, 'remera musculosa lgbt', 'Remera musculosa LGTB', '6849aaf6606e3.png', '2025-06-11 16:12:38', 1, 'Top'),
-(2, 'Remera Huracán', 'Remera de futbol Huracan', '6849f5cbed8fa.jpg', '2025-06-11 21:31:55', 1, 'Top'),
-(3, 'Remera racing', 'remera de Racing Club de Avellaneda', '68600cc3f1bf2.png', '2025-06-28 15:39:47', 1, 'Top');
+INSERT INTO `prendas` (`id`, `titulo`, `descripcion`, `imagen`, `fecha_creacion`, `id_usuario`, `categoria`) VALUES
+(4, 'vestido', 'vestido', '690a733807c87.jpg', '2025-11-04 21:42:16', 1, 'fullbody'),
+(5, 'Camiseta Futbol', 'Camiseta Inter de Miami', '690a740768815.png', '2025-11-04 21:45:43', 1, 'top'),
+(6, 'short de futbol', 'Short de futbol Adidas color blanco', '690a7459ed258.jpeg', '2025-11-04 21:47:05', 1, 'bottom');
 
 -- --------------------------------------------------------
 
@@ -67,7 +67,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `username`, `email`, `password`, `foto_perfil`, `rol`, `fecha_registro`) VALUES
-(1, 'franco', 'franconielsen97@hotmail.com.ar', '$2y$10$uI43mzaHItZjYKs4AYJhduy3nM0ewWM.Q.UnIjM0drKpvVMQ0Q2Lu', '6849a8ead2a8f.jpg', 'admin', '2025-06-11 16:03:54');
+(1, 'franco', 'franconielsen97@hotmail.com.ar', '$2y$10$uI43mzaHItZjYKs4AYJhduy3nM0ewWM.Q.UnIjM0drKpvVMQ0Q2Lu', '6849a8ead2a8f.jpg', 'admin', '2025-06-11 16:03:54'),
+(2, 'Pepe', 'pepe@gmail.com', '$2y$10$VaYr/wL7U5E0MrtgemHnI.MF96urHjD9jlCX3vN9rZnOsqfgBXk8a', '6908f9c4f3b28.jpg', 'cliente', '2025-11-03 18:51:49');
 
 --
 -- Índices para tablas volcadas
@@ -96,13 +97,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `prendas`
 --
 ALTER TABLE `prendas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas

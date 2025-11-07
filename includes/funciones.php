@@ -62,9 +62,9 @@ class Funciones {
         }
     }
 
-    public function crearPrenda($titulo, $descripcion, $imagen, $id_usuario, $tipo_prenda) {
-        $stmt = $this->db->prepare("INSERT INTO prendas (titulo, descripcion, imagen, id_usuario, tipo_prenda) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssiss", $titulo, $descripcion, $imagen, $id_usuario, $tipo_prenda);
+    public function crearPrenda($titulo, $descripcion, $imagen, $id_usuario, $categoria) {
+        $stmt = $this->db->prepare("INSERT INTO prendas (titulo, descripcion, imagen, id_usuario, categoria) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssis", $titulo, $descripcion, $imagen, $id_usuario, $categoria);
         return $stmt->execute();
     }
 
