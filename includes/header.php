@@ -9,7 +9,7 @@
 <body>
     <header>
         <div class="container">
-            <div class="logo">Tienda de Ropa</div>
+            <div class="logo">NeuraWear</div>
             <nav>
                 <ul>
                     <li><a href="<?php echo BASE_URL; ?>/index.php">Inicio</a></li>

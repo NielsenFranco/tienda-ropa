@@ -47,15 +47,36 @@ function getImageFromLocalPath($image_url, $type) {
     return null;
 }
 
-// MAPEAR CATEGORÍAS - PRUEBA CON Top EN LUGAR DE FullBody
+// MAPEAR CATEGORÍAS - VERSIÓN COMPLETA
 function mapCategoryToHUHU($category) {
     $mapping = [
-        'fullbody' => 'Top', // ⚠️ PRUEBA CON Top PRIMERO
+        // Categorías principales
+        'fullbody' => 'Fullbody',
         'upperbody' => 'Top',
         'lowerbody' => 'Bottom',
-        'dress' => 'Top'
+        
+        // Variaciones comunes
+        'top' => 'Top',
+        'bottom' => 'Bottom',
+        'dress' => 'Fullbody',
+        'vestido' => 'Fullbody',
+        'short' => 'Bottom',
+        'pantalon' => 'Bottom',
+        'remera' => 'Top',
+        'camiseta' => 'Top',
+        'camisa' => 'Top'
     ];
-    return $mapping[$category] ?? 'Top';
+    
+    $category_lower = strtolower(trim($category));
+    $huhu_category = $mapping[$category_lower] ?? 'Top';
+    
+    // DEBUG detallado
+    error_log("🎯 MAPEO CATEGORÍA:");
+    error_log("   - Recibida: '$category'");
+    error_log("   - Normalizada: '$category_lower'");
+    error_log("   - Mapeada: '$huhu_category'");
+    
+    return $huhu_category;
 }
 
 // Obtener rutas de imágenes
