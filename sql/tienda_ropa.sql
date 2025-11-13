@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-11-2025 a las 13:44:31
+-- Tiempo de generación: 13-11-2025 a las 15:42:04
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -68,7 +68,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `username`, `email`, `password`, `foto_perfil`, `rol`, `fecha_registro`) VALUES
 (1, 'franco', 'franconielsen97@hotmail.com.ar', '$2y$10$uI43mzaHItZjYKs4AYJhduy3nM0ewWM.Q.UnIjM0drKpvVMQ0Q2Lu', '6849a8ead2a8f.jpg', 'admin', '2025-06-11 16:03:54'),
-(2, 'Pepe', 'pepe@gmail.com', '$2y$10$VaYr/wL7U5E0MrtgemHnI.MF96urHjD9jlCX3vN9rZnOsqfgBXk8a', '6908f9c4f3b28.jpg', 'cliente', '2025-11-03 18:51:49');
+(2, 'Pepe', 'pepe@gmail.com', '$2y$10$VaYr/wL7U5E0MrtgemHnI.MF96urHjD9jlCX3vN9rZnOsqfgBXk8a', '6915ee1d2520d.jpg', 'cliente', '2025-11-03 18:51:49');
 
 --
 -- Índices para tablas volcadas

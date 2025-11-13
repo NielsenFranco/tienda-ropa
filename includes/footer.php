@@ -2,7 +2,7 @@
     
     <footer>
         <div class="container">
-            <p>Tienda de Ropa &copy; <?php echo date('Y'); ?></p>
+            <p>NeuraWear Store &copy; <?php echo date('Y'); ?></p>
         </div>
     </footer>
     

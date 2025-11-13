@@ -121,8 +121,6 @@ class Funciones {
         }
     }
 
-
-
     // ✅ Verifica si un usuario está logueado
     public function estaLogueado() {
         return isset($_SESSION['usuario']);
@@ -130,6 +128,87 @@ class Funciones {
 
     public function getDB() {
         return $this->db;
+    }
+
+    // ==================== FUNCIONES PARA PERFIL DE CLIENTE ====================
+
+    public function actualizarPerfil($id, $username, $email, $foto_perfil = null) {
+        if ($foto_perfil) {
+            $stmt = $this->db->prepare("UPDATE usuarios SET username = ?, email = ?, foto_perfil = ? WHERE id = ?");
+            $stmt->bind_param("sssi", $username, $email, $foto_perfil, $id);
+        } else {
+            $stmt = $this->db->prepare("UPDATE usuarios SET username = ?, email = ? WHERE id = ?");
+            $stmt->bind_param("ssi", $username, $email, $id);
+        }
+        return $stmt->execute();
+    }
+
+    public function obtenerPerfilUsuario($id) {
+        $stmt = $this->db->prepare("SELECT id, username, email, foto_perfil, rol FROM usuarios WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
+
+    public function emailExiste($email, $excluir_id = null) {
+        if ($excluir_id) {
+            $stmt = $this->db->prepare("SELECT id FROM usuarios WHERE email = ? AND id != ?");
+            $stmt->bind_param("si", $email, $excluir_id);
+        } else {
+            $stmt = $this->db->prepare("SELECT id FROM usuarios WHERE email = ?");
+            $stmt->bind_param("s", $email);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+    }
+
+    public function usernameExiste($username, $excluir_id = null) {
+        if ($excluir_id) {
+            $stmt = $this->db->prepare("SELECT id FROM usuarios WHERE username = ? AND id != ?");
+            $stmt->bind_param("si", $username, $excluir_id);
+        } else {
+            $stmt = $this->db->prepare("SELECT id FROM usuarios WHERE username = ?");
+            $stmt->bind_param("s", $username);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->num_rows > 0;
+    }
+
+    // ==================== FUNCIONES ADICIONALES UTILES ====================
+
+    public function eliminarPrenda($id) {
+        $stmt = $this->db->prepare("DELETE FROM prendas WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
+
+    public function actualizarPrenda($id, $titulo, $descripcion, $imagen = null, $categoria = null) {
+        if ($imagen) {
+            $stmt = $this->db->prepare("UPDATE prendas SET titulo = ?, descripcion = ?, imagen = ?, categoria = ? WHERE id = ?");
+            $stmt->bind_param("ssssi", $titulo, $descripcion, $imagen, $categoria, $id);
+        } else {
+            $stmt = $this->db->prepare("UPDATE prendas SET titulo = ?, descripcion = ?, categoria = ? WHERE id = ?");
+            $stmt->bind_param("sssi", $titulo, $descripcion, $categoria, $id);
+        }
+        return $stmt->execute();
+    }
+
+    public function obtenerPrendasPorUsuario($id_usuario) {
+        $stmt = $this->db->prepare("SELECT * FROM prendas WHERE id_usuario = ? ORDER BY fecha_creacion DESC");
+        $stmt->bind_param("i", $id_usuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function cambiarPassword($id, $nueva_password) {
+        $hashed_password = password_hash($nueva_password, PASSWORD_DEFAULT);
+        $stmt = $this->db->prepare("UPDATE usuarios SET password = ? WHERE id = ?");
+        $stmt->bind_param("si", $hashed_password, $id);
+        return $stmt->execute();
     }
 }
 ?>

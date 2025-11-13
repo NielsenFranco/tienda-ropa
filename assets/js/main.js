@@ -5,3 +5,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // Puedes agregar aquí funciones generales que necesites en toda la aplicación
     // Por ejemplo: menús desplegables, notificaciones, etc.
 });
+
